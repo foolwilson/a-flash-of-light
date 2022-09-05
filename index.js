@@ -103,7 +103,7 @@ const chooseOne = function () {
   if (!!restaurant) {
     // 更新查詢結果圖片
     const restaurantPhoto = document.querySelector('.restaurant>img');
-    restaurantPhoto.src = (restaurant.photos && restaurant.photos[0].getUrl()) || '/a_flash_of_light/static/fake.jpg';
+    restaurantPhoto.src = (restaurant.photos && restaurant.photos[0].getUrl()) || '/a-flash-of-light/static/fake.jpg';
     
     // 更新查詢結果資訊
     const restaurantName = document.querySelector('.restaurant>a');
@@ -111,7 +111,7 @@ const chooseOne = function () {
     restaurantName.href = `https://www.google.com/maps/search/?api=1&query=${restaurant.name}`;
   } else {
     // 設定圖片
-    document.querySelector('.restaurant>img').src = '/a_flash_of_light/static/no-picture.jpg';
+    document.querySelector('.restaurant>img').src = '/a-flash-of-light/static/no-picture.jpg';
     
     // 更改文字訊息
     const restaurantName = document.querySelector('.restaurant>a');
