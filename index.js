@@ -14,6 +14,12 @@ const initialize = async function () {
 
   const options = document.getElementsByName('options');
   options.forEach(option => option.addEventListener('click', () => {
+    if (option.id === 'other') {
+      const other = document.getElementsByName('other-option')[0];
+      other.disabled = !other.disabled;
+      other.focus();
+    }
+
     const all = document.getElementById('selectAll');
     let checkedCount = 0;
     options.forEach(option => {
@@ -80,25 +86,25 @@ const search = function () {
   console.log(request);
 
   // 
-  // service.nearbySearch(
-  //   request,
-  //   (results, status, pagination) => {
-  //     if (status == google.maps.places.PlacesServiceStatus.OK) {
-  //       restaurants = results;
-  //       chooseOne();
+  service.nearbySearch(
+    request,
+    (results, status, pagination) => {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        restaurants = results;
+        chooseOne();
 
-  //       // 顯示結果的 Element
-  //       document.getElementsByClassName('restaurant')[0].style.display = 'flex';
+        // 顯示結果的 Element
+        document.getElementsByClassName('restaurant')[0].style.display = 'flex';
 
-  //       // 更新按鈕
-  //       const searchBtn = document.getElementById('search');
-  //       searchBtn.classList.remove('btn-outline-success');
-  //       searchBtn.classList.add('btn-outline-danger');
-  //       searchBtn.innerText = '我想換一家QQ';
-  //       searchBtn.onclick = chooseOne;
-  //     }
-  //   }
-  // );
+        // 更新按鈕
+        const searchBtn = document.getElementById('search');
+        searchBtn.classList.remove('btn-outline-success');
+        searchBtn.classList.add('btn-outline-danger');
+        searchBtn.innerText = '我想換一家QQ';
+        searchBtn.onclick = chooseOne;
+      }
+    }
+  );
 }
 
 const chooseOne = function () {
@@ -139,7 +145,7 @@ const getKeywords = function () {
       switch (o.id) {
         case 'other':
           const other = document.getElementsByName('other-option')[0];
-          keyword.push(other.value);
+          keyword.push(...other.value.split(/,|，|\s/));
           break;
         default:
           keyword.push(o.defaultValue);
