@@ -14,6 +14,21 @@
   <script src="index.js"></script>
 </head>
 <body>
+  <!-- 取得位置資訊失敗彈窗 -->
+  <div class="modal fade" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Oops！您的位置資訊取得失敗TAT</h5>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-danger" onclick="closePage()">那我不使用了～掰噗</button> -->
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="getUserPosition()">我再試一次看看～</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 關鍵字選項 -->
   <div class="keywords">
     <h1>今天想吃點什麼？</h1>
     <form>

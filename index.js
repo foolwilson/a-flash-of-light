@@ -63,7 +63,11 @@ const getUserPosition = function () {
       // 設定查詢按鈕
       setSearchBtn();
     },
-    (error) => console.log(error),
+    (error) => {
+      console.log(error);
+      const modal = new bootstrap.Modal('.modal');
+      modal.show();
+    },
     { timeout: 5000 }
   );
 }
@@ -184,6 +188,11 @@ const setSearchBtn = function () {
   // 調整顯示字樣及更改點擊事件觸發的 method
   searchBtn.innerText = '開始搜尋～';
   searchBtn.onclick = search;
+}
+
+const closePage = function () {
+  window.open('', '_self', '');
+  window.close();
 }
 
 window.initialize = initialize;
