@@ -3,6 +3,10 @@ let position;
 let restaurants;
 
 const initialize = async function () {
+  // 初始化 popover 功能
+  const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+  const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
   // 創建一個 Html Tag 容器給 google map API 使用
   const container = document.createElement('div');
 
