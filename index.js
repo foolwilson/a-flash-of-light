@@ -91,20 +91,31 @@ const search = function () {
   service.nearbySearch(
     request,
     (results, status, pagination) => {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        restaurants = results;
-        chooseOne();
+      switch (status) {
+        case google.maps.places.PlacesServiceStatus.OK:
+          restaurants = results;
+          chooseOne();
 
-        // 顯示結果的 Element
-        document.getElementsByClassName('restaurant')[0].style.display = 'flex';
+          // 顯示結果的 Element
+          document.getElementsByClassName('restaurant')[0].style.display = 'flex';
 
-        // 更新按鈕
-        const searchBtn = document.getElementById('search');
-        searchBtn.classList.remove('btn-outline-success');
-        searchBtn.classList.add('btn-outline-danger');
-        searchBtn.innerText = '我想換一家QQ';
-        searchBtn.onclick = chooseOne;
-      }
+          // 更新按鈕
+          const searchBtn = document.getElementById('search');
+          searchBtn.classList.remove('btn-outline-success');
+          searchBtn.classList.add('btn-outline-danger');
+          searchBtn.innerText = '我想換一家QQ';
+          searchBtn.onclick = chooseOne;
+          break;
+        case google.maps.places.PlacesServiceStatus.NOT_FOUND:
+        case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
+          alert('查無結果，請重新設定條件後再次查詢～');
+          break;
+        case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
+        case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
+        case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
+        case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
+          break;
+        }
     }
   );
 }
@@ -161,6 +172,14 @@ const addOtherOption = function () {
   const other = document.getElementsByName('other-option')[0];
   other.disabled = !other.disabled;
   other.focus();
+
+  // 隱藏結果的 Element
+  document.getElementsByClassName('restaurant')[0].style.display = 'none';
+
+  // 若已有位置資訊，則設定查詢按鈕
+  if (!!position) {
+    setSearchBtn();
+  }
 }
 
 const selectAll = function () {
