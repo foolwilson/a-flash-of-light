@@ -18,12 +18,6 @@ const initialize = async function () {
 
   const options = document.getElementsByName('options');
   options.forEach(option => option.addEventListener('click', () => {
-    if (option.id === 'other') {
-      const other = document.getElementsByName('other-option')[0];
-      other.disabled = !other.disabled;
-      other.focus();
-    }
-
     const all = document.getElementById('selectAll');
     let checkedCount = 0;
     options.forEach(option => {
@@ -145,24 +139,28 @@ const chooseOne = function () {
 
 const getKeywords = function () {
   const options = document.getElementsByName('options');
+  const other = document.getElementById('other');
   let keyword = [];
 
   // 將結果存進 keyword array
   options.forEach(o => {
     if (o.checked) { 
-      switch (o.id) {
-        case 'other':
-          const other = document.getElementsByName('other-option')[0];
-          keyword.push(...other.value.split(/,|，|\s/));
-          break;
-        default:
-          keyword.push(o.defaultValue);
-          break;
-      }
+      keyword.push(o.defaultValue);
     }
   });
 
+  if (other.checked) {
+    const otherOptions = document.getElementsByName('other-option')[0];
+    keyword.push(...otherOptions.value.split(/,|，|\s/));
+  }
+
   return (keyword.length && keyword) || null;
+}
+
+const addOtherOption = function () {
+  const other = document.getElementsByName('other-option')[0];
+  other.disabled = !other.disabled;
+  other.focus();
 }
 
 const selectAll = function () {
