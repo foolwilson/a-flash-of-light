@@ -1,6 +1,6 @@
 let service;
 let position;
-let restaurants;
+let restaurants = [];
 
 const initialize = async function () {
   // 初始化 popover 功能
@@ -44,6 +44,9 @@ const initialize = async function () {
 
     // 若已有位置資訊，則設定查詢按鈕
     if (!!position) {
+      // 移除 disabled 屬性
+      document.getElementById('search').removeAttribute('disabled');
+
       setSearchBtn();
     }
   }));
@@ -57,6 +60,9 @@ const getUserPosition = function () {
     ({ coords: { latitude, longitude } }) => {
       // 取得使用者的位置並設定在 google map 上
       position = new google.maps.LatLng(latitude, longitude);
+
+      // 移除 disabled 屬性
+      document.getElementById('search').removeAttribute('disabled');
 
       // 設定查詢按鈕
       setSearchBtn();
@@ -78,21 +84,30 @@ const search = function () {
   const request = {
     location: position,
     language: 'zh-TW',
-    radius: '150',
+    radius: '300',
     keyword: getKeywords() || ['food'],
     openNow: true,
     rankBy: google.maps.places.RankBy.PROMINENCE,
     type: ['restaurant']
   };
 
-  console.log(request);
-
   // 
   service.nearbySearch(
     request,
     (results, status, pagination) => {
+      // 若還有更多的結果，則將資料找出
+      if (pagination.hasNextPage) {
+        pagination.nextPage();
+      }
+
       switch (status) {
         case google.maps.places.PlacesServiceStatus.OK:
+          // 如果餐廳陣列已經有資料的話
+          if (restaurants.length) {
+            restaurants.push(...results);
+            return;
+          }
+
           restaurants = results;
           chooseOne();
 
@@ -142,6 +157,9 @@ const chooseOne = function () {
     const restaurantName = document.querySelector('.restaurant>a');
     restaurantName.innerText = 'Oops～看來找不到你喜歡的餐廳，請重新設定條件再查詢看看，或點我開起 Google Map 查詢附近的餐廳';
     restaurantName.href = 'https://www.google.com/maps/search/?api=1&query=餐廳';
+
+    // 新增 disabled 屬性
+    document.getElementById('search').setAttribute('disabled', true);
 
     // 設定查詢按鈕
     setSearchBtn();
@@ -195,9 +213,6 @@ const selectAll = function () {
 
 const setSearchBtn = function () {
   const searchBtn = document.getElementById('search');
-
-  // 移除 disabled 屬性
-  searchBtn.removeAttribute('disabled');
 
   // 移除其他按鈕的 class style
   searchBtn.classList.remove('btn-outline-secondary');
